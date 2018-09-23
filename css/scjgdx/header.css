@@ -1,0 +1,16 @@
+.header{width: 100%; background: #fff;border: 1px solid #eee; color: #333;line-height: 25px;padding: 13px 0;position: fixed;top: 0;left: 0;z-index: 1000;}
+.header .fl {font-size: 16px;margin-left: 25px;}
+.header .fr img,
+.header .fr p {display: inline-block;}
+.header .fr a {color: #666;}
+.header .fr a:hover {color: #000;}
+
+
+.cbody{padding-left: 110px;}
+.menuset {background: #20222a;width: 110px;position: fixed;height: 100%;margin-left: -110px;padding-top: 52px;overflow: auto;}
+.menuset ul li a {display: block;width: 100%;height: 165px;padding-top: 30px;}
+.menuset ul li a img {display: block;margin: 0 auto;}
+.menuset ul li a p {text-align: center;font-size: 16px;color: #fff;margin-top: 15px;}
+.menuset ul li .on {background: #009688;}
+.menuset ul li a:hover {background: #009688;}
+.cbody .cbody-right {width: 100%;padding-top: 52px;position: relative;}

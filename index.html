@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>项目台账</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/scjgdx/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scjgdx/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scjgdx/common_new.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scjgdx/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scjgdx/style_new.css"/>
+<script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+    <script>
+
+        $(function() {
+            setCounts();
+
+            tab1bind();
+
+            //tab2bind();
+
+            //tab3bind();
+
+            //tab4bind();
+            $('ul.tab1 > li:eq(0)').trigger('click');
+        });
+
+        function setCounts(){
+            $.ajax({
+                    url : 'json/getJgdxCount.json',
+                    type : 'POST',
+                    data : {} ,
+                    success : function(responseStr) {
+                        if(responseStr.errcode===0){
+                            $('ul.tab1 > li:eq(0)').attr('id','jg');
+                            $('ul.tab1 > li:eq(0)').html(
+                                '<a href="javascript:;">技改(<span>'
+                                + responseStr.data.jgCount
+                                + '</span>)</a>'
+                            );
+                            $('ul.tab1 > li:eq(1)').attr('id','dx');
+                            $('ul.tab1 > li:eq(1)').html(
+                                '<a href="javascript:;">大修(<span>'
+                                + responseStr.data.dxCount
+                                + '</span>)</a>'
+                            );
+                        }else{
+                            alert("查询失败！！\n" + responseStr.errmsg);
+                        }
+                    },
+                    error : function(e) {
+                        alert("error:"+e);
+                    }
+                })
+        }
+
+        function tab1bind(){
+            //技改还是大修的切换
+            $("ul.tab1 li").bind("click", function () {
+                var index = $(this).index();
+                var divs = $(this).parent().parent().parent().find(".tab1-body > div");
+                $(this).parent().children("li").attr("class", "tab1-nav");//将所有选项置为未选中
+                $(this).attr("class", "tab1-nav-action"); //设置当前选中项为选中样式
+                divs.hide();//隐藏所有选中项内容
+                var showDiv = divs.eq(index);
+                showDiv.html('');
+                var jgORdx = $(this).attr('id');
+
+                $.ajax({
+                    url : jgORdx == 'dx' ? 'json/getDaxiuPage.json' : 'json/getJigaiPage.json',
+                    type : 'POST',
+                    data : {
+                        current : 1,
+                        size : 5,
+                        xmmc : $('#xmmc').val(),
+                        ssdw : $('#ssdw').val(),
+                        xmmd : $('#xmmd').val(),
+                        jhnd : $('#jhnd').val(),
+                        dqxxnd : $('#dqxxnd').val(),
+                        jgdxType : jgORdx
+                    } ,
+                    success : function(responseStr) {
+                        if(responseStr.errcode===0){
+                            var record = null;
+                            var str = '<div class="row">'
+                    + '<div class="col-md-4 md-ins-5 tab2">'
+                        + '<div class="suspend">'
+                            + '<a href="javascript:;" class="check-all"><img src="img/scjgdx/img_13.png"><span>全选</span></a>'
+                            + '<a href="javascript:;" class="export"><img src="img/scjgdx/img_14.png"><span>导出</span></a>'
+                        + '</div>'
+                        + '<ul class="tab2">';
+                            for(var i=0;i<responseStr.data.records.length;i++){
+                                record = responseStr.data.records[i];
+                                str = str + '<li class="tab2-nav-action line-b">'
+                                + '<div class="ins-5-tab">'
+                                    + '<input type="checkbox" id="' +record.objId+ '">'
+                                    + '<label for="' +record.objId+ '">'
+                                        + '<p>' +record.xmmc+ '</p>'
+                                        + '<div class="span3"><span class="span1">待办(3)</span><span class="span2" style="background: #f8b551;">预警(2)</span></div>'
+
+                                    + '</label>'
+                                    + '<table>'
+                                        + '<tr>'
+                                            + '<td style="width: 95px;">项目总投资</td>'
+                                            + '<td>' +record.ztz+ '万元</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>项目单位</td>'
+                                            + '<td>' +record.ssdwmc+ '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>形象进度</td>'
+                                            + '<td>' +record.dqxxjdStr+ '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>ERP进度</td>'
+                                            + '<td>' +record.erpjd+ '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>里程碑进度</td>'
+                                            + '<td>' +record.lcbjd+ '</td>'
+                                        + '</tr>'
+                                    + '</table>'
+                                + '</div>'
+                            + '</li>';
+                            }
+                str = str + '</ul></div><div class="col-md-8 md-ins-6 tab2-body"></div></div>';
+                showDiv.html(str);
+
+                showDiv.show(); //显示选中项对应内容
+
+                        }else{
+                            alert("查询失败！！\n" + responseStr.errmsg);
+                        }
+                    },
+                    error : function(e) {
+                        alert("error:"+e);
+                    }
+                }).done(function (data) {
+                    checkAllButtonInit();
+                    exportButtonInit(jgORdx);
+                    tab2bind(jgORdx);
+
+                    var liArr = $(".tab1-body > div").eq(index).find('ul.tab2 li');
+                    if(liArr.length > 0){
+                        $(liArr[0]).trigger('click');
+                    }
+
+                });
+
+            });
+        }
+
+        function tab2bind(jgORdx){
+            //列表内容切换
+            $("ul.tab2 li").unbind("click").bind("click", function () {
+                var showDiv = $(this).parent().parent().parent().find(".tab2-body");
+                var prjId = $(this).find('input[type="checkbox"]').attr('id');
+                $(this).parent().children("li").attr("class", "tab2-nav");//将所有选项置为未选中
+                $(this).attr("class", "tab2-nav-action"); //设置当前选中项为选中样式
+
+                showDiv.html('');
+
+
+
+                $.ajax({
+                    url : 'json/getOne.json',
+                    type : 'POST',
+                    data : {
+                        id : prjId,
+                        jgdxType : jgORdx
+                    } ,
+                    success : function(responseStr) {
+                        if(responseStr.errcode===0){
+                            var record = responseStr.data.project;
+                            var milestone = responseStr.data.milestone;
+                            var str = '<div class="ins-6-tab" style="display: block;">'
+                            + '<p class="ins-tit">' +record.xmmc
+                            + '<span>项目编码&nbsp&nbsp&nbsp' + record.xmbh + '</span></p>'
+                            + '<p class="ins-time">' + record.xmkssjStr + '</p>'
+                            + '<div class="tab3">'
+                                + '<ul class="clearfix tab3">'
+                                    + '<li class="tab3-nav-action">基础信息</li>'
+                                    + '<li class="tab3-nav">里程碑节点</li>'
+                                    + '<li class="tab3-nav">详细信息</li>'
+                                + '</ul>'
+                            + '</div>'
+                            + '<div class="tab3-body">'
+                                + '<div class="ins-7-tab" style="display: block;">'
+                                    + '<ul class="clearfix line-b">'
+                                        + '<li class="fl line-r">'
+                                            + '<p>项目总投资</p>'
+                                            + '<p><span>' + (record.ztz == null ? 0 : record.ztz) + '</span>万元</p>'
+                                        + '</li>'
+                                        + '<li class="fl line-r">'
+                                            + '<p>项目完成资金</p>'
+                                            + '<p><span>' + (record.wczj == null ? 0 : record.wczj) + '</span>万元</p>'
+                                            + '<p>截止八月份已完成' + (record.ljwczj == null ? 0 : record.ljwczj) + '万元</p>'
+                                        + '</li>'
+                                        + '<li class="fl">'
+                                            + '<p>项目入账资金</p>'
+                                            + '<p><span>' + (record.rzzj == null ? 0 : record.rzzj) + '</span>万元</p>'
+                                            + '<p>截止八月份已入账' + (record.ljrzzj == null ? 0 : record.ljrzzj) + '万元</p>'
+                                        + '</li>'
+                                    + '</ul>'
+                                    + '<table class="line-b">'
+                                        + '<tr>'
+                                            + '<td style="width: 70px;">所属批次</td>'
+                                            + '<td>' + record.dxxmssStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td style="width: 70px">项目内容</td>'
+                                            + '<td>' + record.xmnr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td style="width: 70px">电压等级</td>'
+                                            + '<td>' + record.dydjStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td style="width: 70px">专业细分</td>'
+                                            + '<td>' + record.zyxfStr + '</td>'
+                                        + '</tr>'
+                                    + '</table>'
+                                    + '<div class="sunsit clearfix">'
+                                        + '<div class="sun-left fl">'
+                                            + '<p>湖北省农村电网改造升级工程2018年新增中央</p>'
+                                            + '<p>湖北省农村电网改造升级工程</p>'
+                                        + '</div>'
+                                        + '<div class="sun-right fr">'
+                                            + '<p>湖北省农村电网改造升级工程2018年新增中央预</p>'
+                                            + '<p>湖北省农村电网改造升级工程2018年新增中</p>'
+                                        + '</div>'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="ins-8-tab" style="display: none;">'
+                                    + '<p class="ins-8-time">'
+                                        + '<span>项目开始时间：</span><span class="time" style="margin-right: 25px;">' + record.xmkssjStr + '</span>'
+                                        + '<span>项目结束时间：</span><span class="time">' + record.xmjssjStr + '</span>'
+                                    + '</p>'
+                                    + '<table>'
+                                        + '<tr style="background: #ededed;">'
+                                            + '<td></td>'
+                                            + '<td>计划</td>'
+                                            + '<td>进度</td>'
+                                            + '<td>状态</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>计划下达</td>'
+                                            + '<td>' + milestone.xdsjStr + '</td>'
+                                            + '<td>' + milestone.sjxdStr + '</td>'
+                                            + '<td class="text-red">' + milestone.xdsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>项目创建</td>'
+                                            + '<td>' + milestone.xmcjsjStr + '</td>'
+                                            + '<td>' + milestone.sjxmcjStr + '</td>'
+                                            + '<td class="text-green">' + milestone.xmcjsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>物资/服务需求提报</td>'
+                                            + '<td>' + milestone.wzcgxqtbsjStr + '</td>'
+                                            + '<td>' + milestone.sjwzcgxqtbStr + '</td>'
+                                            + '<td class="text-green">' + milestone.wzcgxqtbsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>物资到货</td>'
+                                            + '<td>' + milestone.wzdhsjStr + '</td>'
+                                            + '<td>' + milestone.sjwzdhStr + '</td>'
+                                            + '<td class="text-green">' + milestone.wzdhsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>设计合同签订</td>'
+                                            + '<td>' + milestone.sjcghtqdsjStr + '</td>'
+                                            + '<td>' + milestone.sjsjcghtqdStr + '</td>'
+                                            + '<td class="text-green">' + milestone.sjcghtqdsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>监理合同签订</td>'
+                                            + '<td>' + milestone.jlcghtqdsjStr + '</td>'
+                                            + '<td>' + milestone.sjjlcghtqdStr + '</td>'
+                                            + '<td class="text-green">' + milestone.jlcghtqdsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>初设审批</td>'
+                                            + '<td>' + milestone.csspsjStr + '</td>'
+                                            + '<td>' + milestone.sjcsspStr + '</td>'
+                                            + '<td class="text-green">' + milestone.csspsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>现场开示</td>'
+                                            + '<td>' + milestone.xckgsjStr + '</td>'
+                                            + '<td>' + milestone.sjxckgStr + '</td>'
+                                            + '<td class="text-green">' + milestone.xckgsjztStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td>竣工投运</td>'
+                                            + '<td>' + milestone.jgtysjStr + '</td>'
+                                            + '<td>' + milestone.sjjgtyStr + '</td>'
+                                            + '<td class="text-green">' + milestone.jgtysjztStr + '</td>'
+                                        + '</tr>'
+                                    + '</table>'
+                                + '</div>'
+                                + '<div class="ins-9-tab" style="display: none;">'
+                                    + '<table>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">实施省单位：</td>'
+                                            + '<td style="width: 20%;">' + record.ssdwmc + '</td>'
+                                            + '<td class="text-grey">实施市单位：</td>'
+                                            + '<td>' + record.sssdwmc + '</td>'
+                                            + '<td class="text-grey">实施县单位：</td>'
+                                            + '<td>' + record.ssxdwmc + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">是否他省代维：</td>'
+                                            + '<td>' + record.sfdwStr + '</td>'
+                                            + '<td class="text-grey">资产性质：</td>'
+                                            + '<td>' + record.zcxzStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">编制部门：</td>'
+                                            + '<td>' + record.bzbmmc + '</td>'
+                                            + '<td class="text-grey">编制人：</td>'
+                                            + '<td>' + record.bzrmc + '</td>'
+                                            + '<td class="text-grey">编制时间：</td>'
+                                            + '<td>' + record.bzsjStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">项目类型：</td>'
+                                            + '<td>' + record.xmlxStr + '</td>'
+                                            + '<td class="text-grey">专业类别：</td>'
+                                            + '<td>' + record.zylxStr + '</td>'
+                                            + '<td class="text-grey">专业细分：</td>'
+                                            + '<td>' + record.zyxfStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">电压等级：</td>'
+                                            + '<td>' + record.dydjStr + '</td>'
+                                            + '<td class="text-grey">计划年度：</td>'
+                                            + '<td>' + record.jhnd + '</td>'
+                                            + '<td class="text-grey">项目性质：</td>'
+                                            + '<td>' + record.xmxzStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">项目开始时间：</td>'
+                                            + '<td>' + record.xmkssjStr + '</td>'
+                                            + '<td class="text-grey">项目结束时间：</td>'
+                                            + '<td>' + record.xmjssjStr + '</td>'
+                                            + '<td class="text-grey">是否跨年项目：</td>'
+                                            + '<td>' + record.sfknxmStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">总投资（万元）：</td>'
+                                            + '<td>' + record.ztz + '</td>'
+                                            + '<td class="text-grey">当年投资（万元）：</td>'
+                                            + '<td>' + record.dntz + '</td>'
+                                            + '<td class="text-grey">可研批复文号：</td>'
+                                            + '<td>' + record.kypfwh + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">改造目的：</td>'
+                                            + '<td>' + record.xmmdStr + '</td>'
+                                            + '<td class="text-grey">改造原因：</td>'
+                                            + '<td>' + record.xmyyStr + '</td>'
+                                            + '<td class="text-grey">项目评分：</td>'
+                                            + '<td>' + record.xmpf + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">储备项目级别：</td>'
+                                            + '<td>' + record.cbxmjbStr + '</td>'
+                                            + '<td class="text-grey">专项类别：</td>'
+                                            + '<td>' + record.zxlbStr + '</td>'
+                                            + '<td class="text-grey">储备重点：</td>'
+                                            + '<td>' + record.cbzd + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">是否调度端项目：</td>'
+                                            + '<td>' + record.sfdddxmStr + '</td>'
+                                            + '<td class="text-grey">一体化类型：</td>'
+                                            + '<td>' + record.ythxmlxStr + '</td>'
+                                            + '<td class="text-grey">是否农网：</td>'
+                                            + '<td>' + record.sfnwStr + '</td>'
+                                        + '</tr>'
+                                        + '<tr>'
+                                            + '<td class="text-grey">是否直供直管：</td>'
+                                            + '<td>' + record.sfzgzgStr + '</td>'
+                                            + '<td class="text-grey">预规版本：</td>'
+                                            + '<td>' + record.ygbbStr + '</td>'
+                                            + '<td class="text-grey">是否换流项目：</td>'
+                                            + '<td>' + record.sfhlxmStr + '</td>'
+                                        + '</tr>'
+                                    + '</table>'
+                                    + '<div class="tab4">'
+                                        + '<ul class="clearfix line-b tab4">'
+                                            + '<li class="tab4-nav-action">项目估算书</li>'
+                                            + '<li class="tab4-nav">分年度/分项投资</li>'
+                                            + '<li class="tab4-nav">改造/大修对象</li>'
+                                            + '<li class="tab4-nav">设备主材料</li>'
+                                            + '<li class="tab4-nav">拆旧物资</li>'
+                                            + '<li class="tab4-nav">项目规模</li>'
+                                            + '<li class="tab4-nav">项目成效</li>'
+                                            + '<li class="tab4-nav">项目附件</li>'
+                                            + '<li class="tab4-nav">流程日志</li>'
+                                        + '</ul>'
+                                    + '</div>'
+                                    + '<div class="tab4-body">'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                      + '<div class="ins-10-tab" style="display: none;"></div>'
+                                    + '</div>'
+                                + '</div>'
+                            + '</div>'
+                        + '</div>'
+
+                            showDiv.html(str);
+
+                            showDiv.show();
+
+                        }else{
+                            alert("查询失败！！\n" + responseStr.errmsg);
+                        }
+                    },
+                    error : function(e) {
+                        alert("error:"+e);
+                    }
+                }).done(function (data) {
+                    tab3bind(prjId,jgORdx);
+
+                    var liArr = $(this).parent().parent().parent().find(".tab2-body")
+                          .find('ul.tab3 li');
+                    if(liArr.length > 0){
+                        $(liArr[0]).trigger('click');
+                    }
+
+                });
+            });
+        }
+        function tab3bind(id,jgORdx){
+            //基础信息、里程碑节点、详细信息
+            $("ul.tab3 li").unbind("click").bind("click", function () {
+                var index = $(this).index();
+                var divs = $(this).parent().parent().parent().find(".tab3-body > div");
+                $(this).parent().children("li").attr("class", "tab3-nav");//将所有选项置为未选中
+                $(this).attr("class", "tab3-nav-action"); //设置当前选中项为选中样式
+                divs.hide();//隐藏所有选中项内容
+                divs.eq(index).show(); //显示选中项对应内容
+
+                if(index == 2){
+                    var liArr = $(this).parent().parent().parent().find(".tab3-body")
+                          .find('ul.tab4 li');
+                    if(liArr.length > 0){
+                        $(liArr[0]).trigger('click');
+                    }
+                }
+            });
+            tab4bind(id,jgORdx);
+        }
+        function tab4bind(id,jgORdx){
+            //详细信息下各详细列表（项目估算书...等）切换
+            $("ul.tab4 li").unbind("click").bind("click", function () {
+                var index = $(this).index();
+                var divs = $(this).parent().parent().parent().find(".tab4-body > div");
+                $(this).parent().children("li").attr("class", "tab4-nav");//将所有选项置为未选中
+                $(this).attr("class", "tab4-nav-action"); //设置当前选中项为选中样式
+                divs.hide();//隐藏所有选中项内容
+
+                $.ajax({
+                    url : 'json/getTab4Results' + index + '.json',
+                    type : 'POST',
+                    data : {
+                        id : id,
+                        jgdxType : jgORdx
+                    } ,
+                    success : function(responseStr) {
+                        if(responseStr.errcode===0){
+                            var heads = responseStr.data.theads;
+                            var recs = responseStr.data.results;
+                            var str = '';
+                            if(heads.length > 0){
+                                str = str + '<table>';
+                                str = str + '<tr>';
+                                for(var i=0;i<heads.length;i++){
+                                    str = str + '<th>' + heads[i].value + '</th>';
+                                }
+                                str = str + '</tr>';
+                                for(var i=0;i<recs.length;i++){
+                                    str = str + '<tr>';
+                                    for(var j=0;j<heads.length;j++){
+                                        str = str + '<td>' + recs[i][heads[j].key] + '</td>';
+                                    }
+                                    str = str + '</tr>';
+                                }
+                                str = str + '</table>';
+                                divs.eq(index).html(str);
+                                divs.eq(index).show(); //显示选中项对应内容
+                            }
+                        }else{
+                            alert("查询失败！！\n" + responseStr.errmsg);
+                        }
+                    },
+                    error : function(e) {
+                        alert("error:"+e);
+                    }
+                });
+
+            });
+        }
+
+        function checkAllButtonInit(){
+            $('a.check-all').unbind('click').bind('click',function(){
+                var imgcon = $(this).find('img').attr('src');
+                if(imgcon == 'img/scjgdx/img_13.png'){
+                    $(this).find('img').attr('src','img/scjgdx/img_12.png');
+                    $(this).parent().parent()
+                    .find('ul.tab2 > li > div > input[type="checkbox"]')
+                    .prop('checked',true);
+                }else{
+                    $(this).find('img').attr('src','img/scjgdx/img_13.png');
+                    $(this).parent().parent()
+                    .find('ul.tab2 > li > div > input[type="checkbox"]')
+                    .prop('checked',false);
+                }
+            });
+        }
+
+        function exportButtonInit(jgORdx){
+            $('a.export').unbind('click').bind('click',function(){
+                var checks = $(this).parent().parent()
+                    .find('ul.tab2 > li > div > input[type="checkbox"]:checked');
+                if(checks.length <= 0){
+                    alert('请至少选择一条数据');
+                    return false;
+                }
+
+                var str = '<input type="hidden" name="jgdxType" value="'
+                       + jgORdx
+                       + '" />';
+                checks.each(function(index){
+                    str = str + '<input type="hidden" name="id" value="'
+                       + $(this).attr('id')
+                       + '" />';
+                });
+
+                $('#exportDetails').html(str);
+                $('#exportDetails').attr('action','json/downloadFile')
+                $('#exportDetails').submit();
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper wrapper-content">
+    <div class="record bc-write wrot-pad">
+        <p>筛选条件：</p>
+        <div class="row">
+            <div class="col-md-5 md-ins-4">
+                <span>实施单位：</span>
+                <select id="ssdw" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm">
+                    <option value="">你的公司</option>
+                    <option value="">和我的公司</option>
+                </select>
+                <span>改造目的：</span>
+                <select id="xmmd" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm">
+                    <option value="">我也不知道你什么目的</option>
+                    <option value="">你想干什么</option>
+                </select>
+            </div>
+            <div class="col-md-5 md-ins-4">
+                <span>计划年度：</span>
+                <select id="jhnd" name="DataTables_0Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm">
+                    <option value="">2018</option>
+                    <option value="">2017</option>
+                </select>
+                <span>形象年度：</span>
+                <select id="dqxxnd" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm">
+                    <option value="">2018</option>
+                    <option value="">2017</option>
+                </select>
+            </div>
+            <div class="col-md-2 md-ins-4">
+                <input type="text" id="xmmc" name="xmmc"><img src="img/scjgdx/img_10.png">
+            </div>
+            <form id="exportDetails" method="post" target="_blank"></form>
+        </div>
+        <div class="tab1">
+            <ul id="tab1" class="clearfix tab1">
+                <li class="tab1-nav-action fl"><a href="javascript:;">技改（<span>8</span>）</a></li>
+                <li class="tab1-nav fl"><a href="javascript:;">大修</a></li>
+            </ul>
+        </div>
+        <div id="tab1-body" class="tab1-body">
+            <div style="display: block;">
+                <div class="row">
+                    <div class="col-md-4 md-ins-5 tab2">
+                        <div class="suspend">
+                            <a href="javascript:;" class="check-all"><img src="img/scjgdx/img_13.png"><span>全选</span></a>
+                            <a href="javascript:;" class="export"><img src="img/scjgdx/img_14.png"><span>导出</span></a>
+                        </div>
+                        <ul id="tab2" class="tab2">
+                            <li class="tab2-nav-action line-b">
+                                <div class="ins-5-tab">
+                                    <input type="checkbox" id="checkbox1">
+                                    <label for="checkbox1">
+                                        <p>国网湖北武汉供电公司主调UPS电源系统大修</p>
+                                        <div class="span3"><span class="span1">待办(3)</span><span class="span2" style="background: #f8b551;">预警(2)</span></div>
+
+                                    </label>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 95px;">项目总投资</td>
+                                            <td>5,612万元</td>
+                                        </tr>
+                                        <tr>
+                                            <td>项目单位</td>
+                                            <td>湖北鄂电建设监理责任有限公司</td>
+                                        </tr>
+                                        <tr>
+                                            <td>形象进度</td>
+                                            <td>招标采购</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ERP进度</td>
+                                            <td>签订合同</td>
+                                        </tr>
+                                        <tr>
+                                            <td>里程碑进度</td>
+                                            <td>项目创建</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </li>
+                            <li class="tab2-nav line-b">
+                                <div class="ins-5-tab">
+                                    <input type="checkbox" id="checkbox2">
+                                    <label for="checkbox2">
+                                        <p>国网湖北武汉供电公司主调UPS电源系统</p>
+                                        <div class="span3"><span class="span1">待办(3)</span><span class="span2" style="background: #f8b551;">预警(2)</span></div>
+
+                                    </label>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 95px;">项目总投资</td>
+                                            <td>5,612万元</td>
+                                        </tr>
+                                        <tr>
+                                            <td>项目单位</td>
+                                            <td>湖北鄂电建设监理责任有限公司</td>
+                                        </tr>
+                                        <tr>
+                                            <td>形象进度</td>
+                                            <td>招标采购</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ERP进度</td>
+                                            <td>签订合同</td>
+                                        </tr>
+                                        <tr>
+                                            <td>里程碑进度</td>
+                                            <td>项目创建</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </li>
+                            <li class="tab2-nav line-b">
+                                <div class="ins-5-tab">
+                                    <input type="checkbox" id="checkbox3">
+                                    <label for="checkbox3">
+                                        <p>国网湖北省荆州供电公司主调UPS电源系统</p>
+                                        <div class="span3"><span class="span1">待办(3)</span><span class="span2" style="background: #f8b551;">预警(2)</span></div>
+
+                                    </label>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 95px;">项目总投资</td>
+                                            <td>5,612万元</td>
+                                        </tr>
+                                        <tr>
+                                            <td>项目单位</td>
+                                            <td>湖北鄂电建设监理责任有限公司</td>
+                                        </tr>
+                                        <tr>
+                                            <td>形象进度</td>
+                                            <td>招标采购</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ERP进度</td>
+                                            <td>签订合同</td>
+                                        </tr>
+                                        <tr>
+                                            <td>里程碑进度</td>
+                                            <td>项目创建</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </li>
+                            <li class="tab2-nav">
+                                <div class="ins-5-tab">
+                                    <input type="checkbox" id="checkbox4">
+                                    <label for="checkbox4">
+                                        <p>国网新源控股荆州公司35kV线路杆塔防腐</p>
+                                        <div class="span3"><span class="span1">待办(3)</span><span class="span2" style="background: #f8b551;">预警(2)</span></div>
+
+                                    </label>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 95px;">项目总投资</td>
+                                            <td>5,612万元</td>
+                                        </tr>
+                                        <tr>
+                                            <td>项目单位</td>
+                                            <td>湖北鄂电建设监理责任有限公司</td>
+                                        </tr>
+                                        <tr>
+                                            <td>形象进度</td>
+                                            <td>招标采购</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ERP进度</td>
+                                            <td>签订合同</td>
+                                        </tr>
+                                        <tr>
+                                            <td>里程碑进度</td>
+                                            <td>项目创建</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="tab2-body" class="col-md-8 md-ins-6 tab2-body">
+                        <div class="ins-6-tab" style="display: block;">
+                            <p class="ins-tit">国网湖北武汉供电公司主调UPS电源系统大修<span>项目编码&nbsp&nbsp&nbsp000004832</span></p>
+                            <p class="ins-time">2018-08-20</p>
+                            <div class="tab3">
+                                <ul class="clearfix tab3" id="tab3">
+                                    <li class="tab3-nav-action">基础信息</li>
+                                    <li class="tab3-nav">里程碑节点</li>
+                                    <li class="tab3-nav">详细信息</li>
+                                </ul>
+                            </div>
+                            <div id="tab3-body" class="tab3-body">
+                                <div class="ins-7-tab" style="display: block;">
+                                    <ul class="clearfix line-b">
+                                        <li class="fl line-r">
+                                            <p>项目总投资</p>
+                                            <p><span>5,612</span>元</p>
+                                            <p>截止八月份已投资4,115,2万元</p>
+                                        </li>
+                                        <li class="fl line-r">
+                                            <p>项目完成资金</p>
+                                            <p><span>5,612</span>万元</p>
+                                            <p>截止八月份已投资4,115,2万元</p>
+                                        </li>
+                                        <li class="fl">
+                                            <p>项目入账资金</p>
+                                            <p><span>5,612</span>万元</p>
+                                            <p>截止八月份已投资4,115,2万元</p>
+                                        </li>
+                                    </ul>
+                                    <table class="line-b">
+                                        <tr>
+                                            <td style="width: 70px;">所属批次</td>
+                                            <td>湖北省农村电网改造升级工程2018年新增中央预算内投资计划-江夏区2018年农网改造升级工程</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 70px">项目内容</td>
+                                            <td>该项目内容主要为了完成该项目内容主要为了完该项目内容主要为了完该项目内容主要为了完该项目内容要为</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 70px">电压等级</td>
+                                            <td>交流360V</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 70px">专业细分</td>
+                                            <td>发电</td>
+                                        </tr>
+                                    </table>
+                                    <div class="sunsit clearfix">
+                                        <div class="sun-left fl">
+                                            <p>湖北省农村电网改造升级工程2018年新增中央预算内投资计划-江夏区2018年农网改造升级工程</p>
+                                            <p>湖北省农村电网改造升级工程</p>
+                                        </div>
+                                        <div class="sun-right fr">
+                                            <p>湖北省农村电网改造升级工程2018年新增中央预</p>
+                                            <p>湖北省农村电网改造升级工程2018年新增中央预算内投资计划-江夏区2018年农网改造升级工程</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ins-8-tab" style="display: none;">
+                                    <p class="ins-8-time">
+                                        <span>项目开始时间：</span><span class="time" style="margin-right: 25px;">2018-05-20</span>
+                                        <span>项目结束时间：</span><span class="time">2018-05-20</span>
+                                    </p>
+                                    <table>
+                                        <tr style="background: #ededed;">
+                                            <td></td>
+                                            <td>计划</td>
+                                            <td>进度</td>
+                                            <td>状态</td>
+                                        </tr>
+                                        <tr>
+                                            <td>计划下达</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-red">超期</td>
+                                        </tr>
+                                        <tr>
+                                            <td>项目创建</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>物资/服务需求提报</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>物资到货</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>设计合同签订</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>监理合同签订</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>初设审批</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>现场开示</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                        <tr>
+                                            <td>竣工投运</td>
+                                            <td>2017-05-20</td>
+                                            <td>2017-05-20</td>
+                                            <td class="text-green">正常</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="ins-9-tab" style="display: none;">
+                                    <table>
+                                        <tr>
+                                            <td class="text-grey">实施省单位：</td>
+                                            <td style="width: 20%;">国网湖北省电力公司</td>
+                                            <td class="text-grey">实施市单位：</td>
+                                            <td><input type="text"></td>
+                                            <td class="text-grey">实施县单位：</td>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-grey">是否他省代维：</td>
+                                            <td>否</td>
+
+                                            <td class="text-grey">资产性质：</td>
+                                            <td>省</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-grey">实施省单位：</td>
+                                            <td>国网湖北省电力公司</td>
+                                            <td class="text-grey">实施市单位：</td>
+                                            <td><input type="text"></td>
+                                            <td class="text-grey">实施县单位：</td>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                    </table>
+                                    <div class="tab4">
+                                        <ul id="tab4" class="clearfix line-b tab4">
+                                            <li class="tab4-nav-action">项目估算书</li>
+                                            <li class="tab4-nav">分年度/分项投资</li>
+                                            <li class="tab4-nav">改造/大修对象</li>
+                                            <li class="tab4-nav">设备主材料</li>
+                                            <li class="tab4-nav">折旧物资</li>
+                                            <li class="tab4-nav">项目规模</li>
+                                            <li class="tab4-nav">项目成效</li>
+                                            <li class="tab4-nav">规模成效</li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab4-body" id="tab4-body">
+                                        <div class="ins-10-tab" style="display: block;">
+                                            <table>
+                                                <tr>
+                                                    <th>文件类型</th>
+                                                    <th>文件名称</th>
+                                                    <th>备注</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>估算书封面及签字页扫描</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>非标准格式估算书</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="ins-10-tab" style="display: none;">2222222</div>
+                                        <div class="ins-10-tab" style="display: none;">3333333</div>
+                                        <div class="ins-10-tab" style="display: none;">4444444</div>
+                                        <div class="ins-10-tab" style="display: none;">5555555</div>
+                                        <div class="ins-10-tab" style="display: none;">6666666</div>
+                                        <div class="ins-10-tab" style="display: none;">7777777</div>
+                                        <div class="ins-10-tab" style="display: none;">8888888</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ins-6-tab" style="display: none;">
+                            国网湖北武汉供电公司主调UPS电源系…
+                        </div>
+                        <div class="ins-6-tab" style="display: none;">
+                            国网湖北武汉供电公司主调UPS电源系统大修
+                        </div>
+                        <div class="ins-6-tab" style="display: none;">
+                            国网湖北武汉供电公司主调UPS电源系统大修
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: none;">12345</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

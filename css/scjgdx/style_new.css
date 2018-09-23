@@ -1,0 +1,840 @@
+.bc-green {background: #c2e0dd;}
+.bc-write {background: #fff;}
+ .wrot-pad {padding: 20px;}
+
+/*首页*/
+.cbody-right .record .tit {
+	font-size: 16px;
+	line-height: 30px;
+	background: #009688;
+	color: #fff;
+	width: 260px;
+	text-align: center;
+}
+
+.record .md-ins-1 .clearfix{
+	padding-left: 20px;
+	padding-top: 60px;
+}
+
+.record .md-ins-1 .ins-1-left .blue {
+	display: block;
+	height: 80px;
+	width: 80px;
+	border-radius: 50%;
+	line-height: 80px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 24px;
+	color: #fff;
+}
+
+.record .md-ins-1 .ins-1-left {
+	margin:52px 10px;
+}
+
+.record .md-ins-1 .ins-1-left p {
+	text-align: center;
+	font-size: 15px;
+	margin-top: 15px;
+}
+
+.record .md-ins-1 .ins-1-mid{
+	font-size: 30px;
+	margin:87px 5px;
+}
+
+.record .md-ins-1 .ins-1-right {
+	background: #fff;
+	text-align: center;
+	font-size: 16px;
+	padding: 10px 10px;
+}
+
+ .red {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 70px;
+	color: #f55f89;
+}
+
+.record .md-ins-1 .ins-1-right .yellow {
+	font-size: 36px;
+	font-weight: 600;
+	line-height: 70px;
+	color: #f8b551;
+}
+
+.record .md-ins-2 img {
+	display: block;
+	margin:20px auto;
+	width: 90%;
+}
+
+.record .md-ins-3 .ind-3-title{
+	text-align: center;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.record .md-ins-3 ul li {
+	line-height: 36px;
+}
+
+.record .md-ins-3 ul li .progress-bar {
+	width: 170px;
+	background: #c2e0dd;
+	border: 2px solid #fff ;
+	border-radius: 20px;
+	height: 22px;
+	margin: 6px 10px;
+}
+
+.record .md-ins-3 ul li .progress-bar .bar {
+	display: block;
+	height: 18px;
+	border-radius: 15px;
+	background:linear-gradient(to left, #02f8e1, #02d2be);
+}
+
+.record .md-ins-3 ul li .progress-bar .bar-1 {
+	width: 130px;
+}
+
+.record .md-ins-3 ul li .progress-bar .bar-2 {
+	width: 160px;
+}
+
+.md-ins-2 table {
+	width: 95%;
+	margin: 15px auto;
+	text-align: center;
+	line-height: 50px;
+}
+
+.md-ins-2 table thead tr td {
+	background: #fff;
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.md-ins-2 table tbody tr:hover {
+	background: #9cd2cc;
+}
+
+
+.page-table {
+	float: right;
+}
+
+.page-table {
+	margin-right: 3%;
+	margin-bottom: 20px;
+}
+.page-table .md-ins-3 ul li a{
+	background: #c2e0dd;
+	border: none;
+}
+
+.page-table .md-ins-3 ul .new-disbled a:hover,
+.page-table .md-ins-3 ul  .next a:hover {
+	background: none;
+	color: #000;
+}
+
+.page-table .md-ins-3 ul .new-active a{
+	border:1px solid #009688;
+	color: #009688;
+	margin: 0 9px;
+	border-radius: 5px;
+}
+
+.page-table .md-ins-3 ul .new-diess a{
+	color: #009688;
+}
+
+.page-table .md-ins-3 ul .new-active a:hover {
+	background: #009688;
+	color: #fff;
+}
+
+.page-table .md-ins-3 ul .active a {
+	color: #fff;
+	background: #009688;
+}
+
+
+/*项目台账*/
+.md-ins-4 select {width: 28%;display: inline-block;font-size: 12px;margin-right: 20px;}
+.md-ins-4 input {width: 80%;display: block;font-size: 12px;height: 30px;line-height: 30px;border: 1px solid #eee;padding: 0 30px 0 15px;}
+.md-ins-4  img {display: block;position: absolute;top: 5px;right: 26%;}
+
+.tab1{
+	margin-top: 20px;
+}
+
+.tab1 ul li{
+	float: left;
+	height: 41px;
+	line-height: 41px;
+	width: 130px;
+	text-align: center;
+	font-size: 16px;
+}
+
+.tab1 ul .tab1-nav {
+	cursor:pointer;
+}
+
+.tab1 ul .tab1-nav-action {
+	background: url(../../img/scjgdx/img_11.png) no-repeat;
+	color: #fff;
+}
+
+.tab1 ul .tab1-nav-action a {
+	color: #fff;
+}
+
+.wrot-pad.tab1-body {
+	width: 100%;
+	border: 2px solid #009688;
+}
+
+.md-ins-5 ul  {
+	padding-left: 50px;
+	border-right: 1px solid #eee;
+	height: 720px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+ 
+.md-ins-5 .ins-5-tab {
+	width: 100%;
+}
+
+.md-ins-5 .ins-5-tab input {
+	display: none;
+}
+
+.md-ins-5 .ins-5-tab label {
+	font-weight: 50;
+	width: 100%;
+	position: relative;
+	line-height: 45px;
+	display: block;
+	padding-left: 20px;
+}
+
+.md-ins-5 .ins-5-tab label span {
+	display: inline-block;
+	line-height: 20px;
+	font-size: 11px;
+	color: #fff;
+	padding: 0 2px;
+	border-radius: 3px;
+}
+
+.md-ins-5 .ins-5-tab label  .span1 {
+	background: #f55f89;
+	margin-right: 8px;}
+
+.md-ins-5 .ins-5-tab label  .span2 {
+	background: #f8b551;
+}
+
+.md-ins-5 .ins-5-tab label  .span3 {
+	position: absolute;
+	left: 74%;
+	top: 0;
+}
+.md-ins-5 .ins-5-tab label p {
+	font-size: 15px;
+	position: relative;
+	width: 70%;
+	height: 45px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.md-ins-5 .ins-5-tab label:active{
+                background: #EEEEEE;
+            }
+.md-ins-5 .ins-5-tab label:after{
+                content: "";
+                width: 15px;
+                height: 15px;
+                border: 1px solid green;
+                border-radius: 15px;
+                display: inline-block;
+                position: absolute;
+                top: 15px;
+                left: 0px;
+            }
+.md-ins-5 .ins-5-tab input:checked+label:after{
+                background-color: green;
+            }
+
+.md-ins-5 .ins-5-tab table {
+	line-height: 35px;
+	margin: 5px 0 15px 0;
+}
+
+.md-ins-5 .suspend a {
+	display: block;
+	position: relative;
+	margin-bottom: 10px;
+}
+
+.md-ins-5 .suspend {
+	position: absolute;
+	top: 20px;
+	left: 25px;
+}
+
+.md-ins-5 .suspend a  img {
+	display: inline-block;
+	margin-right: 10px;
+}
+.md-ins-5 .suspend a span {
+	display: block;
+	padding: 2px 5px;
+	border-radius: 3px;
+	background: #fff5e7;
+	border: 1px solid #ffbea2;
+	position: absolute;
+	top: 0;
+	left: 35px;
+	display: none;
+	z-index: 1000;
+}
+
+.md-ins-5 .suspend .check-all span {
+
+}
+
+.md-ins-5 .suspend .check-all:hover span {
+	display: block;
+}
+
+.md-ins-5 .suspend .export:hover span {
+	display: block;
+}
+
+.md-ins-6 {
+	height: 720px;
+	overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.md-ins-6 .ins-tit {
+	margin-top: 30px;
+	margin-bottom: 25px;
+}
+.ins-tit {
+	font-size: 20px;
+	color: #000;
+}
+
+.ins-tit span {
+	font-size: 16px;
+	color: #666;
+	margin-left: 20px;
+}
+
+.ins-time {font-size: 12px;color: #999;}
+
+.md-ins-6 .ins-6-tab {
+	padding-right: 15px;
+}
+
+.md-ins-6 .tab3 {
+	margin-top: 20px;
+}
+
+.md-ins-6 .tab3 ul {
+	border-bottom: 1px solid #eee;
+}
+
+.md-ins-6 .tab3 ul li,
+ .md-ins-6 .tab4 ul li{
+	float: left;
+	padding: 0 15px;
+	line-height: 30px;
+	color: #333;
+	text-align: center;
+	border-bottom: 2px solid #fff;
+	font-size: 16px;
+}
+
+.md-ins-6 .tab3 ul .tab3-nav-action,
+ .md-ins-6 .tab4 ul .tab4-nav-action{
+	border-bottom: 2px solid #009688;
+}
+
+.md-ins-6 .ins-7-tab ul li p {
+	line-height: 35px;
+	text-align: center;
+	font-size: 13px;
+}
+
+.md-ins-6 .ins-7-tab ul li p span {
+	font-size: 22px;
+	color: #009688;
+}
+
+.md-ins-6 .ins-7-tab ul li {
+	width: 250px;
+}
+
+.md-ins-6 .ins-7-tab ul {
+	padding: 25px 5px;
+}
+
+.md-ins-6 .ins-7-tab table,
+.md-ins-6 .ins-7-tab .sunsit,
+.md-ins-6 .ins-8-tab .ins-8-time {
+	width: 97%;
+	margin: 25px auto;
+	font-size: 13px;
+}
+
+.md-ins-6 .ins-7-tab table tr {
+	display: block;
+	min-height: 30px;
+}
+
+.md-ins-6 .ins-7-tab table td {
+	vertical-align: top;
+}
+
+.md-ins-6 .ins-7-tab .sunsit .sun-left,
+.md-ins-6 .ins-7-tab .sunsit .sun-right {
+	width: 47%;
+	line-height: 25px;
+}
+
+.md-ins-6 .ins-7-tab .sunsit p {
+	text-indent: 30px;
+	margin-bottom: 8px;
+}
+
+.md-ins-6 .ins-8-tab .ins-8-time span {
+	display: inline-block;
+}
+
+.md-ins-6 .ins-8-tab .ins-8-time .time {
+	color: #f55f89;
+}
+
+.md-ins-6 .ins-8-tab table {
+ 	width: 80%;
+ 	border:1px solid #ccc;
+ 	line-height: 40px;
+ 	text-align: center;
+}
+
+.md-ins-6 .ins-8-tab table tr td:first-child {
+	border-right: 1px solid #ccc;
+	width: 30%;
+}
+
+.md-ins-6 .ins-9-tab table {
+	width: 98%;
+	background: #ededed;
+	font-size: 13px;
+	line-height: 35px;
+	margin: 15px 0;
+}
+
+.md-ins-6 .ins-9-tab table .text-grey,
+.md-ins-6 .ins-9-tab table input {
+	padding-left: 15px;
+}
+
+
+.md-ins-6 .ins-9-tab table input {
+	background: #fff;
+	border:none;
+	line-height: 25px;
+	height: 25px;
+	width: 80%;
+}
+
+#tab4 {
+	width: 92%;
+	font-size: 14px;
+}
+
+#tab4 li {
+	font-size: 14px;
+}
+
+.md-ins-6 .ins-10-tab table {
+	width: 100%;
+	background: #fff;
+	line-height: 35px;
+	text-align: center;
+}
+
+.md-ins-6 .ins-10-tab table tr th {
+	background: #ededed;
+	text-align: center;
+}
+
+.md-ins-6 .ins-10-tab table tr th,
+.md-ins-6 .ins-10-tab table tr tr {
+	width: 33%;
+}
+
+/*项目跟踪与考核*/
+.md-ins-7 #tab1 li {
+	background: #fff;
+	color: #333;
+	width: 165px;
+	text-align: center;
+}
+
+.md-ins-7 #tab1 .tab1-nav-action {
+	border-bottom: 3px solid #009688;
+	color:#009688;
+}
+
+.md-ins-8 {
+	line-height: 30px;
+	color: #666;
+	margin-top: 20px;
+}
+
+.md-ins-8 p, .md-ins-8 input, .md-ins-8 span {
+	display: inline-block;
+}
+
+.md-ins-8 input {
+	border:1px solid #eee;
+	border-radius: 3px;
+	height: 35px;
+	width: 180px;
+	margin-right: 15px;
+}
+
+.md-ins-8 .border-sousuo {
+	position: relative;
+}
+
+.md-ins-8 .border-sousuo input {
+	border:1px solid #009688;
+	padding-left: 10px;
+
+}
+
+.md-ins-8 .border-sousuo .icon-sousuo {
+	display: block;
+	position: absolute;
+	color: #009688;
+	top: 3px;
+	right: 22px;
+}
+
+.md-ins-8 .xinzeng, .md-ins-8 .baocun {
+	margin-left: 15px;
+}
+
+.md-ins-8 .xinzeng i,  .md-ins-8 .baocun i{
+	color: #009688;
+	margin-right: 5px;
+	font-size: 16px;
+}
+
+.md-ins-8 .xinzeng i:hover,  .md-ins-8 .baocun i:hover {
+	color: #006e6b;
+}
+
+.md-ins-9 table {
+	width: 95%;
+	margin: 15px auto;
+	line-height: 70px;
+	text-align: center;
+	font-size: 13px;
+}
+
+.md-ins-9 table tr:first-child {
+	background: #ededed;
+	font-size: 15px;
+}
+
+.md-ins-9 table tr:hover {
+	background: #ededed;
+}
+
+.md-ins-9 table tr td i {
+	color: #009688;
+	font-size: 18px;
+	margin: 5px;
+}
+
+.md-ins-9 table tr td i:hover {
+	color: #006e6b;
+}
+
+.md-ins-9 table tr .carsname {
+	display: inline-block;
+	width: 370px;
+	height: 70px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+	white-space: nowrap;
+
+}
+
+.md-ins-9 table tr .caorname {
+	display: inline-block;
+	width: 300px;
+	height: 70px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+	white-space: nowrap;
+
+}
+
+/*弹窗*/
+.tanchuang {
+	background-color: rgba(0,0,0,0.3);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+}
+
+.tanchuang .windon {
+	width: 950px;
+	margin: 100px auto;
+	font-size: 13px;
+	background: #fff;
+	padding-bottom: 1px;
+}
+
+.tanchuang .windon .tit {
+	line-height: 50px;
+	background: #009688;
+	padding-left: 15px;
+	font-size: 15px;
+	color: #fff;
+}
+
+.tanchuang .windon table {
+	line-height: 45px;
+	font-size: 12px;
+	background: #ededed;
+	width: 100%;
+}
+
+.tanchuang .windon table tr .cos-1 {
+	width: 100px;
+}
+
+.tanchuang .windon .sen-1 {
+	width: 920px;
+	margin: 15px auto;
+}
+
+.tanchuang .windon .sen-1 .sen-tit {
+	line-height: 35px;
+	font-size: 15px;
+}
+
+.tanchuang .windon table tr td {
+	padding-left: 15px;
+}
+
+.tanchuang .windon table tr input,
+.tanchuang .windon table tr select {
+	height: 30px;
+	line-height: 30px;
+	padding: 0 6px;
+	width:175px;
+	font-size: 13px;	
+	border:1px solid #eee;
+}
+
+.tanchuang .windon .sen-2 table tr .cos-1 {
+	width: 123px;
+}
+.tanchuang .windon .sen-2 table tr input,
+.tanchuang .windon .sen-2 table tr select {
+	width:150px;
+}
+
+/*待办事项*/
+.md-ins-10 ul {
+	padding: 20px 15px;
+}
+
+.md-ins-10 ul li {
+	text-align: center;
+	border-right: 1px solid #ededed;
+	float: left;
+	width: 33%;
+	padding: 20px 15px;
+}
+
+.md-ins-10 ul li p:first-child {
+	text-align: left;
+}
+
+.md-ins-10 ul li p span {
+	font-size: 40px;
+	line-height: 80px;
+	font-weight: 100;
+	margin-right: 5px;
+}
+
+.md-ins-11 .sen-3 .info-1 {
+	width: 200px;
+	height: 140px;
+}
+
+.md-ins-11 .sen-3 .sen-right table {
+	font-size: 13px;
+	line-height: 35px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.md-ins-11 .sen-3 .sen-right table tr td .bc {
+	width: 35px;
+	display: inline-block;
+	height: 20px;
+	border-radius: 3px;
+	font-size: 16px;
+}
+
+.md-ins-11 .sen-3 .sen-right .bc-1 {
+	background: #f55f89;
+}
+
+.md-ins-11 .sen-3 .sen-right .bc-2 {
+	background: #f8b551;
+}
+
+.md-ins-11 .sen-3 .sen-right .bc-3 {
+	background: #02d1be;
+}
+
+.md-ins-11 .sen-3 .sen-right table tr td .red,
+.md-ins-11 .sen-3 .sen-right table tr td .blue,
+.md-ins-11 .sen-3 .sen-right table tr td .yellow {
+	font-size: 18px;
+	line-height: 35px;
+	font-weight: 100;
+}
+
+.md-ins-12 {
+	margin-top: 25px;
+	line-height: 30px;
+}
+
+.md-ins-12 input{
+	display: none;
+}
+
+.md-ins-12 label{
+                display: inline-block;
+                position: relative;
+                font-weight: 100;
+                padding-left: 20px;
+                font-size: 13px;
+                color: #333;
+                margin-left: 10px;
+            }
+ .md-ins-12 label:active{
+                background: #fff;
+            }
+ .md-ins-12 label:after{
+                content: "";/*必须设置*/
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border: 1px solid green;
+                position: absolute;
+                top: 6px;
+                left: 0px;
+            }
+
+ .md-ins-12 input:checked+label:after{
+                background-color: green;
+            }
+
+ .md-ins-12 p {
+ 	display: inline-block;
+ 	position: relative;
+ 	margin-left: 15px;
+ }
+ .md-ins-12  p input {
+ 	display: block;
+ 	height: 30px;
+ 	line-height: 30px;
+ 	width: 150px;
+ 	border:1px solid #009688; 
+ 	border-radius: 3px;
+ }
+
+  .md-ins-12  p a {
+  	display: block;
+  	position: absolute;
+  	top: 3px;
+  	right: 10px;
+  }
+
+ .md-ins-9 .page-table .md-ins-3 ul li a{
+	background: #fff;
+	border: none;
+}
+
+ .md-ins-9 .page-table .md-ins-3 ul .active a {
+ 	color: #889668;
+ }
+
+  .md-ins-9 .page-table .md-ins-3 ul .active a:hover {
+  	color: #fff;
+  }
+
+    .md-ins-9 .page-table .md-ins-3 ul {
+    	padding: 0;
+    	margin: 0;
+    }
+
+/*项目预警*/
+.md-ins-13 {
+	padding: 20px 0;
+	position: relative;
+}
+
+.md-ins-13 img {
+	display: block;
+	position: absolute;
+	width: 80px;
+	top: 20px
+}
+
+.md-ins-13 p {
+	padding-left: 90px;
+	line-height: 40px;
+}
+
+.md-ins-13 p span {
+	font-size: 40px;
+	margin-right: 15px;
+}
+
+.yujing {
+	width: 95%;
+	margin:15px 2.5% 5px;
+}
+
+.yujing p {
+	float: right;
+}
